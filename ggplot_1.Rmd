@@ -1,0 +1,102 @@
+---
+title: "Visualization with ggplot2 - 1"
+author: "Kristi Chau"
+date: "9/26/2019"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(ggridges)
+```
+
+```{r load_data, cache = TRUE}
+weather_df = 
+  rnoaa::meteo_pull_monitors(c("USW00094728", "USC00519397", "USS0023B17S"),
+                      var = c("PRCP", "TMIN", "TMAX"), 
+                      date_min = "2017-01-01",
+                      date_max = "2017-12-31") %>%
+  mutate(
+    name = recode(id, USW00094728 = "CentralPark_NY", 
+                      USC00519397 = "Waikiki_HA",
+                      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
+```
+
+## create a ggplot
+
+```{r}
+ggplot(weather_df, aes(x = tmin,y = tmax)) + geom_point()
+```
+
+alterrnate way of making this plot
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
+saving initial plots, mostly don't use this
+
+```{r}
+weather_df %>%  filter(name == "CentralPark_NY")
+
+scatterplot = 
+  weather_df %>%
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point()
+```
+
+adding color...
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = 0.4) ## alpha - transparency/opacity level
+```
+
+
+why do 'aes' positions matter?
+
+first
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) + 
+  geom_point(aes(color = name), alpha = 0.4) + ## color only defined for point, but not smooth (local coloring)
+  geom_smooth(se = FALSE)
+```
+
+vs
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) + ## color aesthetic mapping applied to all of the plot bc it's in ggplot function (global coloring)
+  geom_point(alpha = 0.4) + 
+  geom_smooth(se = FALSE)
+```
+
+facet!
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax, color = name)) +
+  geom_point(alpha = 0.4) + 
+  geom_smooth(se = FALSE) +
+  facet_grid(~name)
+```
+
+this is fine, but not interesting
+
+```{r}
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point(aes(size = prcp), alpha = 0.375) +
+  geom_smooth(se = FALSE) +
+  facet_grid(~name)
+```
+
