@@ -177,3 +177,78 @@ weather_df %>%
     ## Warning: Removed 3 rows containing missing values (geom_point).
 
 ![](ggplot_1_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+## Some extra stuff
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_smooth(size = 1.5, se = FALSE)
+```
+
+    ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_smooth).
+
+![](ggplot_1_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+2d density
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmin, y = tmax)) +
+  geom_hex()
+```
+
+    ## Warning: Removed 15 rows containing non-finite values (stat_binhex).
+
+![](ggplot_1_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+## More kinds of plots
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmax, fill = name)) +
+  geom_histogram() +
+  facet_grid(~name)
+```
+
+    ## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_bin).
+
+![](ggplot_1_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+density plots
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = tmax, fill = name)) +
+  geom_density(alpha = 0.375)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_density).
+
+![](ggplot_1_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+weather_df %>% 
+  ggplot(aes(x = name, y = tmax, fill = name)) +
+  geom_violin(alpha = 0.35)
+```
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_ydensity).
+
+![](ggplot_1_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+``` r
+weather_df %>% 
+  ggplot(aes(x=tmax, y = name)) +
+  geom_density_ridges()
+```
+
+    ## Picking joint bandwidth of 1.84
+
+    ## Warning: Removed 3 rows containing non-finite values (stat_density_ridges).
+
+![](ggplot_1_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
