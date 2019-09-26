@@ -147,5 +147,23 @@ weather_df %>%
   geom_density_ridges()
 ```
 
+## saving a plot
 
+```{r}
+ggp_ridge_temp = 
+  weather_df %>% 
+  ggplot(aes(x = tmax, y = name)) +
+  geom_density_ridges()
+
+ggsave("ggplot_temp_ridge.pdf",ggp_ridge_temp)
+```
+
+```{r, fig.width = 6}
+## keep in mind how it looks when you knit (fig.width)
+
+weather_df %>% 
+  ggplot(aes(x = date, y = tmax, color = name)) +
+  geom_point(aes(size = prcp), alpha = 0.375) +
+  geom_smooth(se = FALSE)
+```
 
